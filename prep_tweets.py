@@ -57,5 +57,3 @@ tweets
 # %%
 tweets.to_parquet('datasets/tweets.par')
 tweets.to_csv('datasets/tweets.csv')
-
-# %%
