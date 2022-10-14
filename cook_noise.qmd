@@ -1,0 +1,60 @@
+---
+jupyter:
+  jupytext:
+    formats: 'ipynb,qmd'
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.14.1
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+```
+
+```{python}
+tweets = (
+    pd
+    .read_parquet('datasets/tweets.par')
+    .assign(
+        user_screen_name = lambda df: df.user_screen_name.astype('category')
+    )
+)
+
+tweets
+```
+
+```{python}
+colors = {
+    'lemondefr': 'black',
+    'Mediapart': 'red',
+    'MediapartBlogs': 'green'
+}
+
+plt.figure(figsize=(15, 10))
+
+for account in list(tweets.user_screen_name.cat.categories):
+    
+    df = (
+        tweets
+        .query('user_screen_name == @account')
+        .assign(
+            local_time=lambda d: pd.to_datetime(d.local_time)
+        )
+    )
+    
+    plt.scatter(
+        x=df.local_time,
+        y=df.local_time.dt.hour*60+df.local_time.dt.minute,
+        s=df.retweet_count,
+        alpha=0.3,
+        color=colors[account]
+    )
+```
+
