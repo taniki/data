@@ -1,0 +1,52 @@
+---
+jupyter:
+  jupytext:
+    formats: 'ipynb,qmd'
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.14.1
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
+```{python}
+import pandas as pd
+```
+
+```{python}
+tweets = (
+    pd
+    .read_parquet('datasets/tweets.par')
+    # .assign(
+    #     local_time=lambda d: pd.to_datetime(d.local_time),
+    #     user_screen_name = lambda df: df.user_screen_name.astype('category')
+    # )
+)
+```
+
+```{python}
+table = (
+    tweets
+    .reset_index()
+    .assign(
+        date= lambda df: df.local_time.dt.date
+    )
+    .groupby(['user_screen_name', 'date'])
+        [['id']]
+        .count()
+        .rename(columns={'id':'tweets per day'})
+    .groupby(['user_screen_name'])
+        .agg(['mean', 'std', 'min', 'max'])
+)
+
+table
+```
+
+```{python}
+print(table.to_markdown())
+```
+
