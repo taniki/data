@@ -1,4 +1,5 @@
 ---
+output-file: stats.html
 jupyter:
   jupytext:
     formats: 'ipynb,qmd'

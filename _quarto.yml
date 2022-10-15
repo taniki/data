@@ -1,0 +1,18 @@
+project:
+  type: website
+  render:
+    - "*.qmd"
+
+website:
+  title: "économie de l'attention"
+  navbar:
+    background: primary
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+execute:
+  freeze: auto
