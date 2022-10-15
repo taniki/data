@@ -15,6 +15,7 @@ jupyter:
 
 ```{python}
 import pandas as pd
+import matplotlib.pyplot as plt
 ```
 
 ```{python}
@@ -29,7 +30,7 @@ tweets = (
 ```
 
 ```{python}
-table = (
+tweets_day = (
     tweets
     .reset_index()
     .assign(
@@ -39,6 +40,13 @@ table = (
         [['id']]
         .count()
         .rename(columns={'id':'tweets per day'})
+    #.reset_index()
+)
+```
+
+```{python}
+table = (
+    tweets_day
     .groupby(['user_screen_name'])
         .agg(['mean', 'std', 'min', 'max'])
 )
@@ -50,3 +58,47 @@ table
 print(table.to_markdown())
 ```
 
+```{python}
+fig, ax = plt.subplots()
+
+fig.set_size_inches(15, 10)
+
+
+
+(
+    tweets_day
+    .reset_index()
+    .plot
+        .scatter(
+            x='date',
+            y='tweets per day',
+            c='user_screen_name',
+            s=10,
+            cmap='Accent',
+            colorbar=False,
+            alpha=0.2,
+            ax=ax
+        )
+)
+
+(
+    tweets_day
+    .pivot_table(
+        index='date',
+        columns='user_screen_name',
+        values='tweets per day'
+    )
+    .rolling(7)
+    .mean()
+    .plot
+        .line(
+            ax=ax,
+            cmap='Accent'
+            #logy=True
+        )
+)
+
+plt.savefig('graphics/tweets_day.png')
+
+plt.show()
+```
