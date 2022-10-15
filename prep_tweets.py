@@ -25,7 +25,11 @@ scraper = TwitterAPIScraper()
 accounts = [
     'lemondefr',
     'mediapart',
-    'mediapartblogs'
+    'mediapartblogs',
+    'lesjoursfr',
+    'blast_france',
+    'brutofficiel',
+    'loopsidernews'
 ]
 
 since = '2022-01-01'
@@ -48,7 +52,8 @@ tweets = (
     .concat(list(dfs.values()))
     .set_index('id')
     .assign(
-        local_time=lambda d: pd.to_datetime(d.local_time)
+        local_time=lambda d: pd.to_datetime(d.local_time),
+        user_screen_name = lambda df: df.user_screen_name.astype('category')
     )
 )
 
