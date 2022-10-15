@@ -1,7 +1,7 @@
 ---
 jupyter:
   jupytext:
-    formats: 'ipynb,qmd'
+    formats: 'ipynb,qmd:quarto'
     text_representation:
       extension: .qmd
       format_name: quarto
@@ -16,6 +16,7 @@ jupyter:
 ```{python}
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 ```
 
 ```{python}
@@ -28,36 +29,44 @@ tweets
 ```
 
 ```{python}
+enumerate(tweets.user_screen_name.cat.categories)
+```
+
+```{python}
 fig, ax = plt.subplots()
 
-colors = {
-    'lemondefr': 'black',
-    'Mediapart': 'red',
-    'MediapartBlogs': 'green'
-}
+# colors = {
+#     'lemondefr': 'black',
+#     'Mediapart': 'red',
+#     'MediapartBlogs': 'green'
+# }
 
 fig.set_size_inches(15, 10)
 
-for account in list(tweets.user_screen_name.cat.categories):
-    
-    df = (
-        tweets
-        .query('user_screen_name == @account')
-        .assign(
-            local_time=lambda d: pd.to_datetime(d.local_time)
-        )
-    )
-    
-    plt.scatter(
-        x=df.local_time,
-        y=df.local_time.dt.hour*60+df.local_time.dt.minute,
-        s=df.retweet_count,
-        alpha=0.3,
-        color=colors[account]
-    )
+df = (
+    tweets
+    .query('user_screen_name != "lemondefr"')
+)
+
+#s_scale = np.logspace(1, 10000)
+
+scatter = ax.scatter(
+    x=df.local_time.dt.date,
+    y=df.local_time.dt.hour*60+df.local_time.dt.minute,
+    s=np.interp(df.retweet_count, (0, df.retweet_count.max()), (5, 1000)),
+    #label=list(df.user_screen_name.cat.categories),
+    alpha=0.5,
+    c=df.user_screen_name.cat.codes,
+    cmap='tab10'
+)
     
 ax.set_ylim(0, 24*60)
-    
+
+legend1 = ax.legend(scatter.legend_elements()[0], df.user_screen_name.cat.categories, loc="lower left", title="comptes twitter")
+ax.add_artist(legend1)
+
+handles, labels = scatter.legend_elements(prop="sizes", alpha=0.6)
+legend2 = ax.legend(handles, labels, loc="lower right", title="retweets")
 
 plt.tight_layout()
 plt.savefig('graphics/timeline-raw.png');
