@@ -22,22 +22,21 @@ import matplotlib.pyplot as plt
 tweets = (
     pd
     .read_parquet('datasets/tweets.par')
-    .assign(
-        user_screen_name = lambda df: df.user_screen_name.astype('category')
-    )
 )
 
 tweets
 ```
 
 ```{python}
+fig, ax = plt.subplots()
+
 colors = {
     'lemondefr': 'black',
     'Mediapart': 'red',
     'MediapartBlogs': 'green'
 }
 
-plt.figure(figsize=(15, 10))
+fig.set_size_inches(15, 10)
 
 for account in list(tweets.user_screen_name.cat.categories):
     
@@ -56,5 +55,11 @@ for account in list(tweets.user_screen_name.cat.categories):
         alpha=0.3,
         color=colors[account]
     )
+    
+ax.set_ylim(0, 24*60)
+    
+
+plt.tight_layout()
+plt.savefig('graphics/timeline-raw.png');
 ```
 
