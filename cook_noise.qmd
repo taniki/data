@@ -1,6 +1,7 @@
 ---
 output-file: twitter-noise.html
-
+execute:
+  echo: false
 jupyter:
   jupytext:
     formats: 'ipynb,qmd:quarto'
@@ -13,16 +14,16 @@ jupyter:
     display_name: Python 3 (ipykernel)
     language: python
     name: python3
-
-execute:
-  echo: false
 ---
 
 # Twitter : bruit ou information ?
 
 ```{python}
 import pandas as pd
+
 import matplotlib.pyplot as plt
+import matplotlib as mpt
+
 import numpy as np
 ```
 
@@ -34,7 +35,7 @@ tweets = (
 ```
 
 ```{python}
-figsize = (8,6)
+figsize = (15,10)
 ```
 
 ```{python}
@@ -48,26 +49,36 @@ def timeline(df, ax):
         c=df.user_screen_name.cat.codes,
         cmap='tab10'
     )
-    
+
+    plt.ylabel('heure')
     ax.set_ylim(0, 24*60)
 
     legend1 = ax.legend(scatter.legend_elements()[0], df.user_screen_name.unique(), loc="lower left", title="comptes twitter")
     ax.add_artist(legend1)
 
     handles, labels = scatter.legend_elements(prop="sizes", alpha=0.6)
-    legend2 = ax.legend(handles, labels, loc="lower right", title="retweets")
+    #legend2 = ax.legend(handles, labels, loc="lower right", title="retweets")
     
     return scatter
 
 def show_timeline(account):
-	fig, ax = plt.subplots()
-	fig.set_size_inches(*figsize)
-	timeline(tweets.query(f'user_screen_name.isin(@account)'), ax)
-	plt.tight_layout()
-	plt.show()
+    fig, ax = plt.subplots()
+    fig.set_size_inches(*figsize)
+    #fig.set_dpi(600)
+    
+    timeline(tweets.query(f'user_screen_name.isin(@account)'), ax)
+    
+    ax.yaxis.set_major_locator(mpt.ticker.MultipleLocator(4*60))
+    ax.yaxis.set_major_formatter(lambda x,pos: '{:0.0f}'.format(x/60))
+    ax.yaxis.set_minor_locator(mpt.ticker.MultipleLocator(60))
+    
+    plt.grid(axis='y')
+    
+    plt.tight_layout()
+    plt.show()
 ```
 
-## La vue d'ensemble
+## Vue d'ensemble
 
 ```{python}
 fig, ax = plt.subplots()
@@ -76,8 +87,15 @@ fig.set_size_inches(*figsize)
 
 timeline(tweets, ax)
 
+ax.yaxis.set_major_locator(mpt.ticker.MultipleLocator(4*60))
+ax.yaxis.set_major_formatter(lambda x,pos: '{:0.0f}'.format(x/60))
+ax.yaxis.set_minor_locator(mpt.ticker.MultipleLocator(60))
+
+plt.grid(axis='y')
+
 plt.tight_layout()
 plt.savefig('graphics/timeline-raw.png');
+plt.show()
 ```
 
 ## Le Monde
@@ -95,5 +113,6 @@ show_timeline(['Mediapart', 'MediapartBlogs'])
 ## Brut et Loopsider
 
 ```{python}
-show_timeline(['brutofficiel', 'Loopsidernews'])
+show_timeline(['brutofficiel'])
 ```
+
