@@ -1,4 +1,6 @@
 ---
+output-file: twitter-noise.html
+
 jupyter:
   jupytext:
     formats: 'ipynb,qmd:quarto'
@@ -11,7 +13,12 @@ jupyter:
     display_name: Python 3 (ipykernel)
     language: python
     name: python3
+
+execute:
+  echo: false
 ---
+
+# Twitter : bruit ou information ?
 
 ```{python}
 import pandas as pd
@@ -24,51 +31,69 @@ tweets = (
     pd
     .read_parquet('datasets/tweets.par')
 )
-
-tweets
 ```
 
 ```{python}
-enumerate(tweets.user_screen_name.cat.categories)
+figsize = (8,6)
 ```
+
+```{python}
+def timeline(df, ax):
+    scatter = ax.scatter(
+        x=df.local_time.dt.date,
+        y=df.local_time.dt.hour*60+df.local_time.dt.minute,
+        s=np.interp(df.retweet_count, (0, tweets.retweet_count.max()), (5, 1000)),
+        #label=df.user_screen_name.tolist(),
+        alpha=0.5,
+        c=df.user_screen_name.cat.codes,
+        cmap='tab10'
+    )
+    
+    ax.set_ylim(0, 24*60)
+
+    legend1 = ax.legend(scatter.legend_elements()[0], df.user_screen_name.unique(), loc="lower left", title="comptes twitter")
+    ax.add_artist(legend1)
+
+    handles, labels = scatter.legend_elements(prop="sizes", alpha=0.6)
+    legend2 = ax.legend(handles, labels, loc="lower right", title="retweets")
+    
+    return scatter
+
+def show_timeline(account):
+	fig, ax = plt.subplots()
+	fig.set_size_inches(*figsize)
+	timeline(tweets.query(f'user_screen_name.isin(@account)'), ax)
+	plt.tight_layout()
+	plt.show()
+```
+
+## La vue d'ensemble
 
 ```{python}
 fig, ax = plt.subplots()
 
-# colors = {
-#     'lemondefr': 'black',
-#     'Mediapart': 'red',
-#     'MediapartBlogs': 'green'
-# }
+fig.set_size_inches(*figsize)
 
-fig.set_size_inches(15, 10)
-
-df = (
-    tweets
-    .query('user_screen_name != "lemondefr"')
-)
-
-#s_scale = np.logspace(1, 10000)
-
-scatter = ax.scatter(
-    x=df.local_time.dt.date,
-    y=df.local_time.dt.hour*60+df.local_time.dt.minute,
-    s=np.interp(df.retweet_count, (0, df.retweet_count.max()), (5, 1000)),
-    #label=list(df.user_screen_name.cat.categories),
-    alpha=0.5,
-    c=df.user_screen_name.cat.codes,
-    cmap='tab10'
-)
-    
-ax.set_ylim(0, 24*60)
-
-legend1 = ax.legend(scatter.legend_elements()[0], df.user_screen_name.cat.categories, loc="lower left", title="comptes twitter")
-ax.add_artist(legend1)
-
-handles, labels = scatter.legend_elements(prop="sizes", alpha=0.6)
-legend2 = ax.legend(handles, labels, loc="lower right", title="retweets")
+timeline(tweets, ax)
 
 plt.tight_layout()
 plt.savefig('graphics/timeline-raw.png');
 ```
 
+## Le Monde
+
+```{python}
+show_timeline(['lemondefr'])
+```
+
+## Mediapart
+
+```{python}
+show_timeline(['Mediapart', 'MediapartBlogs'])
+```
+
+## Brut et Loopsider
+
+```{python}
+show_timeline(['brutofficiel', 'Loopsidernews'])
+```

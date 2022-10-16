@@ -1,0 +1,11 @@
+{
+  "hash": "699e99c32de042bcc3d157d9681d1277",
+  "result": {
+    "markdown": "---\noutput-file: twitter-noise.md\nexecute:\n  echo: false\n---\n\n# Twitter : bruit ou information ?\n\n\n\n\n\n\n\n\n\n## La vue d'ensemble\n\n::: {.cell execution_count=5}\n\n::: {.cell-output .cell-output-display}\n![](cook_noise_files/figure-html/cell-6-output-1.png){width=758 height=566}\n:::\n:::\n\n\n## Le Monde\n\n::: {.cell execution_count=6}\n\n::: {.cell-output .cell-output-display}\n![](cook_noise_files/figure-html/cell-7-output-1.png){width=758 height=566}\n:::\n:::\n\n\n## Mediapart\n\n::: {.cell execution_count=7}\n\n::: {.cell-output .cell-output-display}\n![](cook_noise_files/figure-html/cell-8-output-1.png){width=758 height=566}\n:::\n:::\n\n\n## Brut et Loopsider\n\n::: {.cell execution_count=8}\n\n::: {.cell-output .cell-output-display}\n![](cook_noise_files/figure-html/cell-9-output-1.png){width=758 height=566}\n:::\n:::\n\n\n::: {.cell execution_count=9}\n\n::: {.cell-output .cell-output-display}\n![](cook_noise_files/figure-html/cell-10-output-1.png){width=758 height=566}\n:::\n:::\n\n\n",
+    "supporting": [
+      "cook_noise_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
