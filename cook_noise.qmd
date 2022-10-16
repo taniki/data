@@ -107,12 +107,22 @@ show_timeline(['lemondefr'])
 ## Mediapart
 
 ```{python}
-show_timeline(['Mediapart', 'MediapartBlogs'])
+show_timeline(['Mediapart'])
+```
+
+```{python}
+show_timeline(['MediapartBlogs'])
 ```
 
 ## Brut et Loopsider
 
 ```{python}
+#| layout-ncol: 2
+#| fig-cap:
+#|   - Brut
+#|   - Loopsider
+
 show_timeline(['brutofficiel'])
+show_timeline(['Loopsidernews'])
 ```
 
