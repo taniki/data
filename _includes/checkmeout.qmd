@@ -1,0 +1,3 @@
+:::{.callout-note}
+Des remarques, des questions ou une envie que j'étende une analyse à votre média indépendant ? N'hésitez pas à me contacter par email `tk at renard point ninja` ou mastodon `@tk@social.apreslanu.it`.
+:::

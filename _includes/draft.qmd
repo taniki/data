@@ -1,0 +1,5 @@
+:::{.callout-warning}
+
+Le contenu en dessous est encore à l'état de brouillon. Il s'agit avant tout de notes de travail qui ne font pas encore complètement sens et à ne pas prendre trop au sérieux.
+
+:::

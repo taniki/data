@@ -7,6 +7,14 @@ website:
   title: "économie de l'attention"
   navbar:
     background: primary
+  page-footer:
+    right:
+      - icon: github
+        href: https://github.com/taniki
+      - icon: mastodon
+        href: https://social.apreslanu.it/@tk
+      - icon: twitter
+        href: https://twitter.com/taniki
 
 format:
   html:

@@ -12,12 +12,20 @@ jupyter:
     display_name: Python 3 (ipykernel)
     language: python
     name: python3
+
+execute:
+  echo: false
 ---
+
+
+{{< include _includes/draft.qmd >}}
 
 ```{python}
 import pandas as pd
 import matplotlib.pyplot as plt
 ```
+
+# Quelques statistiques sur l'usage de twitter par les médias
 
 ```{python}
 tweets = (
@@ -56,10 +64,13 @@ table
 ```
 
 ```{python}
+#| output: false
 print(table.to_markdown())
 ```
 
 ```{python}
+#| layout-ncol: 1
+
 fig, ax = plt.subplots()
 
 fig.set_size_inches(15, 10)
@@ -103,3 +114,5 @@ plt.savefig('graphics/tweets_day.png')
 
 plt.show()
 ```
+
+{{< include _includes/checkmeout.qmd >}}

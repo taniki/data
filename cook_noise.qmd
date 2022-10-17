@@ -18,6 +18,8 @@ jupyter:
 
 # Twitter : bruit ou information ?
 
+{{< include _includes/draft.qmd >}}
+
 ```{python}
 import pandas as pd
 
@@ -81,6 +83,8 @@ def show_timeline(account):
 ## Vue d'ensemble
 
 ```{python}
+#| layout-ncol: 1
+
 fig, ax = plt.subplots()
 
 fig.set_size_inches(*figsize)
@@ -101,16 +105,19 @@ plt.show()
 ## Le Monde
 
 ```{python}
+#| layout-ncol: 1
 show_timeline(['lemondefr'])
 ```
 
 ## Mediapart
 
 ```{python}
+#| layout-ncol: 1
 show_timeline(['Mediapart'])
 ```
 
 ```{python}
+#| layout-ncol: 1
 show_timeline(['MediapartBlogs'])
 ```
 
@@ -125,4 +132,4 @@ show_timeline(['MediapartBlogs'])
 show_timeline(['brutofficiel'])
 show_timeline(['Loopsidernews'])
 ```
-
+{{< include _includes/checkmeout.qmd >}}
