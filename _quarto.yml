@@ -27,3 +27,7 @@ format:
 
 execute:
   freeze: auto
+
+comments:
+  giscus:
+    repo: taniki/eco.attention

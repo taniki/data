@@ -1,4 +1,5 @@
 ---
 title: "pages"
 listing: default
+comments: false
 ---
