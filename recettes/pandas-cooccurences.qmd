@@ -1,0 +1,125 @@
+---
+editor_options:
+  markdown:
+    wrap: 72
+    references:
+      location: block
+    canonical: true
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.14.1
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
+# les co-occurences avec pandas
+
+## les ingrédients
+
+```{python}
+import pandas as pd
+from sklearn import manifold
+from sklearn.preprocessing import MultiLabelBinarizer
+import numpy as np
+```
+
+```{python}
+pokemons = pd.read_csv('https://gist.githubusercontent.com/armgilles/194bcff35001e7eb53a2a8b441e8b2c6/raw/92200bc0a673d5ce2110aaad4544ed6c4010f687/pokemon.csv')
+
+pokemons
+```
+
+## transformer des colonnes de liste en une liste colonnes
+
+```{python}
+mlb = MultiLabelBinarizer()
+
+pokemons_types = (
+ 	pokemons
+	.set_index('Name')
+ 	.fillna('No Type 2')
+	.assign(
+ 		types = lambda df: list(zip(df['Type 1'], df['Type 2']))
+ 	)
+ 	.pipe(
+ 		lambda df: pd.DataFrame(
+			mlb.fit_transform(df.types),
+			columns=mlb.classes_,
+			index=df.index
+		)
+ 	)
+ )
+ 
+pokemons_types
+```
+
+## visualiser la matrice de corrélation
+
+```{python}
+(
+	pokemons_types
+	.corr()
+	.style
+        .format('{:+,.1%}'.format)
+        .background_gradient(
+            cmap='PiYG',
+            vmin=-1,
+            vmax=1
+        )
+)
+```
+
+## compter les co-occurences
+
+```{python}
+(
+	pokemons_types.T
+	.dot(pokemons_types)
+)
+```
+
+{{<  include ../_includes/draft.qmd  >}}
+
+## visualiser les ressemblances
+
+```{python}
+tsne = manifold.TSNE(learning_rate='auto', init='random')
+
+pokemons_xy = (
+    pd
+    .DataFrame(
+        tsne.fit_transform(pokemons_types),
+        columns=['x', 'y'],
+        index=pokemons_types.index
+    )
+)
+
+pokemons_xy
+```
+
+```{python}
+(
+    pokemons_xy
+    .join(
+        pokemons
+        .set_index('Name')
+        [['Type 1']]
+    )
+    .plot
+    .scatter(
+        x='x',
+        y='y',
+        c= pokemons['Type 1'].astype('category').cat.codes,
+        cmap='tab20',
+        s=5,
+        figsize=(15,15),
+        legend=None
+    )
+)
+```

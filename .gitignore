@@ -1,5 +1,7 @@
 .ipynb_checkpoints
 *.ipynb
 
+.quarto
+_site
+
 /.quarto/
-/_site/
