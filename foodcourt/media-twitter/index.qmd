@@ -1,0 +1,10 @@
+---
+comments: false
+
+listing:
+  contents: "*.qmd"
+
+toc: false
+---
+
+# twitter et économie de l'attention

@@ -21,6 +21,7 @@ format:
     toc: true
     code-fold: true
     code-tools: true
+    code-line-numbers: true
     fig-responsive: true
 
 execute:

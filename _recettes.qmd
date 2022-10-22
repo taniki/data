@@ -1,0 +1,7 @@
+---
+listing:
+  contents:
+    - "recettes/*.qmd"
+
+comments: false
+---

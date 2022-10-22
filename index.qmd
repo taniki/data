@@ -1,5 +1,28 @@
 ---
-title: "pages"
-listing: default
 comments: false
+
+listing:
+  - id: recettes
+    contents: "recettes/*.qmd"
+    type: grid
+  - id: foodcourt
+    contents: "/foodcourt/**/index.qmd"
+    type: grid
+
+toc: false
 ---
+
+## les recettes
+
+Des bouts de code et du partage de techniques
+
+:::{#recettes}
+:::
+
+
+## le food court
+
+Les sujets du moment
+
+:::{#foodcourt}
+:::
