@@ -8,6 +8,9 @@ website:
   navbar:
     background: primary
   page-footer:
+    left:
+      - text: stats
+        href: https://plausible.io/data.11d.im/
     right:
       - icon: github
         href: https://github.com/taniki
@@ -15,6 +18,8 @@ website:
         href: https://social.apreslanu.it/@tk
       - icon: twitter
         href: https://twitter.com/taniki
+  repo-url: https://github.com/taniki/data
+  repo-actions: [issue]
 
 format:
   html:

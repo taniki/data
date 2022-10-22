@@ -1,0 +1,8 @@
+---
+comments: false
+---
+
+# inspirations
+
+- [code.larlet.fr](https://code.larlet.fr/)
+- [Code. Simply. Clearly. Calmly.](https://calmcode.io/)
