@@ -27,10 +27,27 @@ Les sujets du moment
 :::{#foodcourt}
 :::
 
-## ustensils
-
-
-## TIL
+<!--
+## til
 
 
 ## chartbook
+
+-->
+
+## ustensils
+
+liste github : https://github.com/stars/taniki/lists/data-cooking-utensils
+
+
+## le cellier
+
+### où trouver des jeux de données
+
+github : https://github.com/stars/taniki/lists/data-ingredients
+
+data.gouv.fr
+
+kaggle
+
+data is plural : https://www.data-is-plural.com/
