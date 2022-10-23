@@ -34,6 +34,8 @@ import numpy as np
 ```
 
 ```{python}
+#| column: page
+
 pokemons = pd.read_csv('https://gist.githubusercontent.com/armgilles/194bcff35001e7eb53a2a8b441e8b2c6/raw/92200bc0a673d5ce2110aaad4544ed6c4010f687/pokemon.csv')
 
 pokemons.set_index('Name')
@@ -42,6 +44,8 @@ pokemons.set_index('Name')
 ## transformer des colonnes de liste en une liste colonnes
 
 ```{python}
+#| column: page
+
 mlb = MultiLabelBinarizer()
 
 pokemons_types = (
@@ -66,6 +70,7 @@ pokemons_types
 ## visualiser la matrice de corrélation
 
 ```{python}
+#| column: page
 (
 	pokemons_types
 	.corr()
@@ -82,6 +87,7 @@ pokemons_types
 ## compter les co-occurences
 
 ```{python}
+#| column: page
 (
 	pokemons_types.T
 	.dot(pokemons_types)
@@ -108,6 +114,8 @@ pokemons_xy
 ```
 
 ```{python}
+#| layout-ncol: 1
+#| column: page
 (
     pokemons_xy
     .join(
