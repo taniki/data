@@ -1,4 +1,6 @@
 ---
+author: tam kien duong
+
 editor_options:
   markdown:
     wrap: 72
