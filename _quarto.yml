@@ -8,10 +8,10 @@ website:
   navbar:
     background: primary
   page-footer:
-    left:
-      - text: stats
-        href: https://plausible.io/data.11d.im/
+    left: "dernière modification : {{< meta date >}}"
     right:
+      - icon: bar-chart-fill
+        href: https://plausible.io/data.11d.im/
       - icon: github
         href: https://github.com/taniki
       - icon: mastodon
@@ -35,3 +35,6 @@ execute:
 comments:
   giscus:
     repo: taniki/data
+
+date: last-modified
+date-format: iso
