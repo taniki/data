@@ -12,6 +12,8 @@ website:
     right:
       - icon: bar-chart-fill
         href: https://plausible.io/data.11d.im/
+      - icon: heart-fill
+        href: https://quarto.org
       - icon: github
         href: https://github.com/taniki
       - icon: mastodon
