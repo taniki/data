@@ -1,0 +1,108 @@
+---
+author: tam kien duong
+
+echo: true
+code-fold: false
+---
+
+# visualiser les données d'alerte propluvia
+
+Dans de snack, nous allons regarder comment :
+
+- préparer des données qui ne sont pas d'une qualité vertigineuse
+- produire un graphique exploratoire
+
+Le but est de voir comment aller au plus simple de la donnée jusqu'à la visualisation.
+
+## ingrédients
+
+On commence par importer pandas. Rien de bien surprenant jusque là.
+
+```{python}
+import pandas as pd
+```
+
+On importe les données légèrement brute de propluvia tout en préparant le typage des colonnes qui nous intéressent en les transformant en date ou en catégorie.
+
+```{python}
+#| column: page
+
+propluvia = (
+	pd
+	.read_csv('https://raw.githubusercontent.com/taniki/propluvia/main/propluvia.csv')
+	.assign(
+		Date_debut = lambda d: pd.to_datetime(d.Date_debut, errors='coerce'),
+		Date_fin = lambda d: pd.to_datetime(d.Date_fin, errors='coerce'),
+		NIVEAU= lambda d: d.NIVEAU.astype('category')
+	)
+	.drop_duplicates()
+)
+
+propluvia
+```
+
+## niveaux d'alerte
+
+On goute ensuite aux données. Ici, je regarde le nombre d'arrêté par niveau d'alerte. Le `Serie.to_frame()` est surtout esthétique, `Serie.value_counts()` renvoyant ici une série qui serait représenté sous forme de texte et non de tableau sans cela.
+
+```{python}
+propluvia.NIVEAU.value_counts().to_frame()
+```
+
+## évolution de la surface des niveaux d'alerte
+
+Afin de décomposer mon code, je prépare une petite fonction qui me donne la surface et le nombre d'arrêté par niveau d'alerte pour une date donnée.
+
+```{python}
+def agg_day(date):
+	return (
+		propluvia
+		[(propluvia.Date_debut <= date) * (propluvia.Date_fin >= date)]
+		.groupby('NIVEAU')
+		.agg({
+			'Surface': 'sum',
+			'Numero_AR': 'count'
+		})
+		.reset_index()
+		.assign(
+			date = date,
+		)
+		#.drop(columns=propluvia.columns)
+	)
+
+agg_day('2022-06-15')
+```
+
+La sélection est faite avec [`[]`](https://pandas.pydata.org/docs/user_guide/indexing.html#basics) par force d'habitude mais pour des soucis de lisibilité, il est souvent préférable d'utiliser [`DataFrame.query()`](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html)
+
+Pour aboutir à la visualisation, il y a deux étapes importantes :
+
+- la transformation en table de pivot afin que chaque ligne du graphique corresponde à une colonne. Ici comme, on cherche à avoir une ligne par niveau d'alerte.
+- l'utilisation de `DataFrame.plot.line()` afin de séparer chaque niveau d'alerte avec le paramètre `subplots` et la normalisation de l'axe des ordonnées avec `sharey`.
+
+
+```{python}
+#| layout-ncol: 1
+(
+	pd
+	.concat([ agg_day(date) for date in pd.date_range(propluvia.Date_debut.min(),propluvia.Date_fin.max())])
+	.pivot_table(
+		index='date',
+		columns='NIVEAU',
+		values='Surface'
+	)
+	.plot
+		.line(
+			sharey=True,
+			subplots=True,
+			figsize=(15,9*3)
+		)
+);
+```
+
+## après
+
+Voilà, je suis allé au plus court et il y a possibilité d'aller plus loin :
+
+- ordonner les niveaux d'alerte : [Categorical data](https://pandas.pydata.org/pandas-docs/stable/user_guide/categorical.html)
+- améliorer le graphique de synthèse : [pandas.DataFrame.plot](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html)
