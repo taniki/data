@@ -3,10 +3,13 @@ comments: false
 
 listing:
   - id: recettes
-    contents: "recettes/*.qmd"
+    contents: "/recettes/*.qmd"
     type: grid
   - id: foodcourt
     contents: "/foodcourt/**/index.qmd"
+    type: grid
+  - id: snacks
+    contents: "/snacks/*.qmd"
     type: grid
 
 toc: false
@@ -22,9 +25,17 @@ Des bouts de code et du partage de techniques
 
 ## le food court
 
-Les sujets du moment
+Les sujets du moment organisés en séries.
 
 :::{#foodcourt}
+:::
+
+
+## snacks
+
+Des petites explorations à grignoter. 
+
+:::{#snacks}
 :::
 
 <!--
