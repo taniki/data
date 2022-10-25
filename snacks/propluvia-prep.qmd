@@ -1,13 +1,23 @@
 ---
 author: tam kien duong
-
 echo: true
 code-fold: false
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.14.1
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
 ---
 
 # visualiser les données d'alerte propluvia
 
-Dans de snack, nous allons regarder comment :
+Dans ce snack, nous allons regarder comment :
 
 - préparer des données qui ne sont pas d'une qualité vertigineuse
 - produire un graphique exploratoire
@@ -33,7 +43,9 @@ propluvia = (
 	.assign(
 		Date_debut = lambda d: pd.to_datetime(d.Date_debut, errors='coerce'),
 		Date_fin = lambda d: pd.to_datetime(d.Date_fin, errors='coerce'),
-		NIVEAU= lambda d: d.NIVEAU.astype('category')
+		NIVEAU= lambda d: d.NIVEAU.astype('category'),
+		Region= lambda d: d.Region.astype('category'),
+		Departement= lambda d: d.Departement.astype('category'),
 	)
 	.drop_duplicates()
 )
@@ -47,6 +59,12 @@ On goute ensuite aux données. Ici, je regarde le nombre d'arrêté par niveau d
 
 ```{python}
 propluvia.NIVEAU.value_counts().to_frame()
+```
+
+Par soucis de concision, on ne va garder que les 4 principaux niveaux.
+
+```{python}
+niveaux = propluvia.NIVEAU.value_counts().index.tolist()[:4]
 ```
 
 ## évolution de la surface des niveaux d'alerte
@@ -80,13 +98,13 @@ Pour aboutir à la visualisation, il y a deux étapes importantes :
 - la transformation en table de pivot afin que chaque ligne du graphique corresponde à une colonne. Ici comme, on cherche à avoir une ligne par niveau d'alerte.
 - l'utilisation de `DataFrame.plot.line()` afin de séparer chaque niveau d'alerte avec le paramètre `subplots` et la normalisation de l'axe des ordonnées avec `sharey`.
 
-
 ```{python}
 #| layout-ncol: 1
 (
 	pd
 	.concat([ agg_day(date) for date in pd.date_range(propluvia.Date_debut.min(),propluvia.Date_fin.max())])
-	.pivot_table(
+    .query('NIVEAU.isin(@niveaux)')
+    .pivot_table(
 		index='date',
 		columns='NIVEAU',
 		values='Surface'
@@ -95,9 +113,23 @@ Pour aboutir à la visualisation, il y a deux étapes importantes :
 		.line(
 			sharey=True,
 			subplots=True,
-			figsize=(15,9*3)
+			figsize=(15,len(niveaux)*3)
 		)
 );
+```
+
+```{python}
+(
+    propluvia
+    .query('NIVEAU.isin(@niveaux)')
+    .pivot_table(
+        index='Region',
+        columns='NIVEAU',
+        values='Numero_AR',
+        aggfunc='count'
+    )
+    [niveaux]
+)
 ```
 
 ## après
