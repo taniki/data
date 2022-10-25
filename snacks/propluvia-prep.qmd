@@ -100,6 +100,8 @@ Pour aboutir à la visualisation, il y a deux étapes importantes :
 
 ```{python}
 #| layout-ncol: 1
+import matplotlib.pyplot as plt
+
 (
 	pd
 	.concat([ agg_day(date) for date in pd.date_range(propluvia.Date_debut.min(),propluvia.Date_fin.max())])
@@ -113,9 +115,12 @@ Pour aboutir à la visualisation, il y a deux étapes importantes :
 		.line(
 			sharey=True,
 			subplots=True,
-			figsize=(15,len(niveaux)*3)
+			figsize=(15,len(niveaux)*4),
+			ylabel='surface (km2)',
 		)
-);
+)
+
+plt.savefig('graphics/propluvia-niveaux.png', facecolor='white', transparent=False)
 ```
 
 ```{python}
@@ -125,8 +130,8 @@ Pour aboutir à la visualisation, il y a deux étapes importantes :
     .pivot_table(
         index='Region',
         columns='NIVEAU',
-        values='Numero_AR',
-        aggfunc='count'
+        values='Surface',
+        aggfunc='sum'
     )
     [niveaux]
 )
