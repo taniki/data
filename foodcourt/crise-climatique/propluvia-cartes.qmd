@@ -18,17 +18,20 @@ jupyter:
 
 # évolution annuelle des restrictions d'eau
 
-:::{.callout-important appearance="simple"}
+:::{.column-page layout-ncol=1}
+![](graphics/propluvia-carte-sample)
+:::
+
+:::{.callout-note appearance="simple"}
 Contenu encore en cours d'écriture et de peaufinage. Je suis  débutant en cartographie et en geopandas, il y a certainment moyen d'optimiser le code. Je compte également apporter plus de nuance à la visualisation finale.
 :::
 
 ## résumé
 
-Comment les politiques publiques s'emparent des problématiqes de la crise climatiques avec des restrictions d'eau ?
+Comment les politiques publiques s'emparent des problématiques de la crise climatiques avec des restrictions d'eau ?
 
-Les données utilisées proviennent du scrapping effectué par [cquest] du site [propluvia]. Elles concernent allant du `01.01.2010 ` au `06.08.2022`.
+Les données utilisées proviennent du scrapping effectué par [Christian Quest][cquest] du site [propluvia]. Elles concernent allant du `01.01.2010 ` au `06.08.2022`. Pour une première approche, il y a cette [analyse exploratoire](/snacks/propluvia-prep.qmd) qui permettra d'avoir un avant goût des données.
 
-- [ ] rajouter descriptif propluvia
 
 [cquest]: https://data.cquest.org/propluvia/
 [propluvia]: http://propluvia.developpement-durable.gouv.fr/

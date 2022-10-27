@@ -15,9 +15,18 @@ listing:
 toc: false
 ---
 
-:::{.callout-important appearance="simple"}
+:::{.grid}
+:::{.g-col-8}
+:::{.lead}
 
-## Bienvenue !
+Salut ! Ici, c'est [la cuisine à données](a-propos.qmd).
+
+On y prépare des analyses et des visualisations, on partage des techniques pour faire de bons plats, on discute des différents ustensils et des ingrédients. L'idée est de donner à voir le travail de la donnée comme une pratique de production de connaissance et d'information.
+:::
+:::
+:::
+
+:::{.callout-important appearance="simple"}
 
 Ce site vient tout juste de commencer. Les permaliens risquent de bouger subtilement. L'écriture se cherche encore. La présence d'un gif "en construction" des années 90 est également en considération.
 
@@ -62,6 +71,8 @@ liste github : https://github.com/stars/taniki/lists/data-cooking-utensils
 
 
 ## le cellier
+
+Des réserves de nourriture pour l'esprit. Des ingrédients sélectionnés et expliqués
 
 ### où trouver des jeux de données
 

@@ -1,6 +1,19 @@
 ---
+comments: false
 ---
 
-## ce site
+## la cuisine à données
+
+L'intention de ce site est avant tout de partager des pratiques d'analyse de données afin de le rendre plus ouvertes en les rendant plus ouvrables. Il s'agit avant tout de démystifier le travail de sa donnée en montrant comme elle devient consommable dans la vie de l'esprit. Ainsi même s'il s'agit de code et d'informatique, la manière de parler est différent d'une pratique d'informaticien et je voulais montrer qu'il y avait d'autres normes d'écritures permettant un compromis entre lisibilité, éfficacité et production d'une connaissance auto-centrée sur la machine.
+
+### suivi d'audience
+
+Ce site utilise [plausible](https://plausible.io) pour avoir une idée de son utilité et de son audience. Il n'y a pas de tracage individuel en tant que tel. Par soucis de transparence, ces données sont ouvertes sur ce [tableau de bord](https://plausible.io/data.11d.im/).
+
 
 ## tam kien duong
+
+Je suis analyste de données dans un [média indépendant](https://mediapart.fr) après avoir travaillé dans l'open data et la recherche scientifique. Mon parcours est relativement cohérent, j'ai fait des études en mathématiques, en sciences humaines et la jonction entre les deux, les statistiques, avant la mode de la *data science*.
+
+- [site web](https://11d.im)
+- [@taniki](https://twitter.com/taniki)
