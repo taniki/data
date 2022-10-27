@@ -19,7 +19,7 @@ jupyter:
 # évolution annuelle des restrictions d'eau
 
 :::{.callout-important appearance="simple"}
-Contenu encore en cours d'écriture et de peaufinage. Je suis en début en cartographie et en geopandas, il y a certainment moyen d'optimiser le code. Je compte également apporter plus de nuance à la visualisation finale.
+Contenu encore en cours d'écriture et de peaufinage. Je suis  débutant en cartographie et en geopandas, il y a certainment moyen d'optimiser le code. Je compte également apporter plus de nuance à la visualisation finale.
 :::
 
 ## résumé
@@ -30,7 +30,7 @@ Les données utilisées proviennent du scrapping effectué par [cquest] du site 
 
 - [ ] rajouter descriptif propluvia
 
-[cquest]: data.cquest.org/propluvia/
+[cquest]: https://data.cquest.org/propluvia/
 [propluvia]: http://propluvia.developpement-durable.gouv.fr/
 
 ## préparation des données
