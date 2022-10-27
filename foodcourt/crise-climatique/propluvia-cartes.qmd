@@ -1,0 +1,208 @@
+---
+execute:
+  echo: true
+code-fold: false
+jupyter:
+  jupytext:
+    formats: 'ipynb,qmd'
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.14.1
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
+# évolution annuelle des restriction d'eau
+
+:::{.callout-important appearance="simple"}
+Contenu encore en cours d'écriture et de peaufinage. Je suis en début en cartographie et en geopandas, il y a certainment moyen d'optimiser le code. Je compte également apporter plus de nuance à la visualisation finale.
+:::
+
+## résumé
+
+Comment les politiques publiques s'emparent des problématiqes de la crise climatiques avec des restrictions d'eau ?
+
+Les données utilisées proviennent du scrapping effectué par [cquest] du site [propluvia]. Elles concernent allant du `01.01.2010 ` au `06.08.2022`.
+
+- [ ] rajouter descriptif propluvia
+
+[cquest]: data.cquest.org/propluvia/
+[propluvia]: http://propluvia.developpement-durable.gouv.fr/
+
+## préparation des données
+
+```{python}
+import pandas as pd
+import geopandas as gpd
+import matplotlib.pyplot as plt
+import cartiflette.s3
+```
+
+```{python}
+#| output: false
+
+propluvia = (
+	pd
+	.read_csv('https://raw.githubusercontent.com/taniki/propluvia/main/propluvia.csv')
+	.assign(
+		Date_debut = lambda d: pd.to_datetime(d.Date_debut, errors='coerce'),
+		Date_fin = lambda d: pd.to_datetime(d.Date_fin, errors='coerce'),
+		NIVEAU= lambda d: d.NIVEAU.astype('category'),
+		Region= lambda d: d.Region.astype('category'),
+		Departement= lambda d: d.Departement.astype('category'),
+	)
+	.drop_duplicates()
+)
+
+propluvia
+```
+
+```{python}
+#| output: false
+zones = (
+    gpd
+    .read_file('../../datasets/propluvia/SHP_20220806.geojson')
+    .assign(
+        type= lambda d: d.type.astype('category')
+    )
+    .set_index('codeZA')
+)
+
+zones
+```
+
+```{python}
+#| echo: false
+#| output: false
+
+zones[zones.duplicated()]
+```
+
+```{python}
+zones_exclude = [
+    '971',
+    '972',
+    '973',
+    '974',
+    '976',
+    '97500',
+    '98'
+]
+```
+
+```{python}
+niveaux = {
+    'Crise': '#FF4136',
+    'Alerte renforcée': '#FF851B',
+    'Alerte': '#FFDC00',
+    'Vigilance': '#AAAAAA'
+}
+```
+
+### préparation du fond de carte
+
+https://github.com/gregoiredavid/france-geojson
+
+```{python}
+departements = (
+    gpd
+    .read_file('../../datasets/propluvia/departements-version-simplifiee.geojson')
+)
+
+departements.plot(
+    color='white',
+    edgecolor='#ddd',
+    linewidth=0.4
+)
+```
+
+### carte pour une année et une niveau d'alerte
+
+```{python}
+def single(year, level, ax_):
+    
+    departements.plot(
+        color='white',
+        edgecolor='#ddd',
+        linewidth=0.4,
+        ax=ax_
+    )
+    
+    ax = (
+        propluvia
+        .query('Date_debut.dt.year == @year or Date_fin.dt.year == @year')
+        .query('NIVEAU == @level')
+        .set_index('Code_ZA')
+        .join(zones)
+        .query('not codeDep.isin(@zones_exclude)')
+        .pipe(lambda df: gpd.GeoDataFrame(df) )
+        .plot(
+            color=niveaux[level],
+            ax=ax_
+        )
+    )
+    
+    ax.set_axis_off()
+    # ax.xaxis.set_visible(False)
+    # plt.setp(axes[1,0].spines.values(), visible=False)
+
+    return ax
+
+annees = propluvia.Date_debut.dt.year.dropna().unique()
+
+#[ single(int(y), n) for y in annees for n in list(niveaux.keys()) ]
+#[ single(2022, n) for n in list(niveaux.keys()) ]
+
+fig, ax = plt.subplots()
+
+single(2022, 'Crise', ax)
+
+plt.show()
+```
+
+## carte des territoires concernés par une arrêté par année
+
+```{python}
+#| column: page
+#| layout-ncol: 1
+
+annees_ = [2022, 2018, 2016, 2014, 2012]
+#annees_ = [2022, 2019]
+
+pad = 5
+
+fig, ax = plt.subplots(len(annees_), len(niveaux), figsize=(len(niveaux)*4, len(annees_)*4), sharex='all', sharey='all')
+
+for i,y in enumerate(annees_):
+    for j,n in enumerate(list(niveaux.keys())):
+        single(y, n, ax[i,j])
+        
+for c,n in enumerate(niveaux):
+    ax[0,c].set_title(n)
+    
+for r,y in enumerate(annees_):
+    ax[r,0].annotate(
+        y,
+        xy=(0, 0.5),
+        xytext=(-ax[r,0].yaxis.labelpad-pad,0),                    
+        xycoords=ax[r,0].yaxis.label,
+        textcoords='offset points',
+        size='large',
+        ha='right',
+        va='center'
+    )
+
+plt.tight_layout()
+fig.subplots_adjust(left=0.18, top=0.95)
+
+plt.savefig('graphics/propluvia-carte-sample.png', facecolor='white', transparent=False)
+```
+
+## pour aller plus loin
+
+- [Données spatiales: découverte de geopandas](https://linogaliana-teaching.netlify.app/geopandas/)
+- [cartiflette](https://github.com/InseeFrLab/cartiflette)

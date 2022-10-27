@@ -1,0 +1,12 @@
+---
+abstract: comprendre le changement climatique avec des données
+
+comments: false
+
+listing:
+  contents: "*.qmd"
+
+toc: false
+---
+
+# La crise climatique en données
