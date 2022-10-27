@@ -15,6 +15,16 @@ listing:
 toc: false
 ---
 
+:::{.callout-important appearance="simple"}
+
+## Bienvenue !
+
+Ce site vient tout juste de commencer. Les permaliens risques de bouger encore un peu. L'écriture se cherche encore.
+
+Tous les feedbacks sont les bienvenues dans [l'espace discussion de github](https://github.com/taniki/data/discussions). 
+
+:::
+
 ## les recettes
 
 Des bouts de code et du partage de techniques
