@@ -16,7 +16,7 @@ jupyter:
     name: python3
 ---
 
-# évolution annuelle des restriction d'eau
+# évolution annuelle des restrictions d'eau
 
 :::{.callout-important appearance="simple"}
 Contenu encore en cours d'écriture et de peaufinage. Je suis en début en cartographie et en geopandas, il y a certainment moyen d'optimiser le code. Je compte également apporter plus de nuance à la visualisation finale.
@@ -120,7 +120,7 @@ departements.plot(
 )
 ```
 
-### carte pour une année et une niveau d'alerte
+### carte en fonction de l'année et du niveau d'alerte
 
 ```{python}
 def single(year, level, ax_):

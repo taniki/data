@@ -19,7 +19,7 @@ toc: false
 
 ## Bienvenue !
 
-Ce site vient tout juste de commencer. Les permaliens risques de bouger encore un peu. L'écriture se cherche encore.
+Ce site vient tout juste de commencer. Les permaliens risquent de bouger subtilement. L'écriture se cherche encore. La présence d'un gif "en construction" des années 90 est également en considération.
 
 Tous les feedbacks sont les bienvenues dans [l'espace discussion de github](https://github.com/taniki/data/discussions). 
 
