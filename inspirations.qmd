@@ -8,3 +8,4 @@ comments: false
 - [Code. Simply. Clearly. Calmly.](https://calmcode.io/)
 - [Maggie Appleton](https://maggieappleton.com/)
 - [Data Analysis Journal](https://dataanalysis.substack.com/)
+- [Node.js • Apprendre par la pratique](https://apprendre-nodejs.fr/v1/)
