@@ -11,6 +11,9 @@ listing:
   - id: snacks
     contents: "/snacks/*.qmd"
     type: grid
+  - id: datasets
+    contents: "/datasets/*qmd"
+    type: grid
 
 toc: false
 ---
@@ -73,6 +76,9 @@ liste github : https://github.com/stars/taniki/lists/data-cooking-utensils
 ## le cellier
 
 Des réserves de nourriture pour l'esprit. Des ingrédients sélectionnés et expliqués
+
+:::{#datasets}
+:::
 
 ### où trouver des jeux de données
 

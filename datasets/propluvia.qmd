@@ -1,0 +1,16 @@
+---
+author: tam kien duong
+---
+
+# Arrêtés de restriction d'eau (ProPluvia)
+
+[ProPluvia][1] est une application du ministère de l'écologie permettant de suivre la publication des arrêtés concernant les restrictions d'eau de 2010 jusqu'à aujourd'hui.
+
+[1]: http://propluvia.developpement-durable.gouv.fr/propluvia/faces/index.jsp
+
+En août 2022, une nouvelle version de leur site permettant un export automatisé ainsi qu'une API a été mise en ligne puis retirée.
+
+- [export automatisé des données par Christian Quest](http://data.cquest.org/propluvia/)
+- [github de backup des données](https://github.com/taniki/propluvia)
+- [thread sur le forum *team open data*](https://teamopendata.org/t/propluvia/3853/1)
+- [thread sur le forum de l'association *ouvre boîte*](https://forum.ouvre-boite.org/t/donnees-propluvia-arretes-de-secheresse/442)
