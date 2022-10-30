@@ -1,0 +1,11 @@
+---
+author: tam kien duong
+---
+
+# Établissements sanitaires et sociaux
+
+Le Fichier National des Établissements Sanitaires et Sociaux (a.k.a FINESS) est un annuaire contenant des informations sur les établissements de santé.
+
+- [Fichier national des établissements sanitaires et sociaux](http://finess.sante.gouv.fr/fininter/jsp/index.jsp)
+- [jeu de données sur data.gouv.fr](https://www.data.gouv.fr/fr/datasets/finess-extraction-du-fichier-des-etablissements/)
+- [scripts de nettoyage](https://github.com/taniki/notebooks/tree/master/finess)
