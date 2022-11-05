@@ -1,0 +1,11 @@
+{
+  "hash": "243a924a6fb24fcd00dd850419b2ff14",
+  "result": {
+    "markdown": "---\nauthor: tam kien duong\n---\n\n# Aides à la presse\n\n- [fiche sur data.gouv.fr][1]\n- [fiche sur le portail open data du ministère de la culture][2]\n\n[1]: https://www.data.gouv.fr/fr/datasets/aides-a-la-presse-1/\n[2]: https://data.culture.gouv.fr/explore/?disjunctive.theme=&disjunctive.keyword=&sort=modified&q=aide\n\n",
+    "supporting": [
+      "aides-presse_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}

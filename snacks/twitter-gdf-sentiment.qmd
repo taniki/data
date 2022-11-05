@@ -1,0 +1,169 @@
+---
+author: tam kien duong
+code-fold: false
+jupyter:
+  jupytext:
+    formats: 'ipynb,qmd:quarto'
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.14.1
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
+# visualiser une évolution de tweets
+
+Attention, ce snack est du fast food tendance junk food.
+
+L'ami Stéphane Wharton voulait un coup d'oeuil sur l'[analyse de sentiment qu'il a opéré sur les tweets d'un député d'extrême-droite ayant tenu des propos racistes à l'assemblée][1].
+Ne faisant pas une veille sur le sujet, les questions qui semblent pertinente sont :
+
+- quel est la tonalité habituelle des propos du député sur twitter ?
+- est-ce que certaines tonalités ont un fonctionnement différent en terme d'audience ?
+
+[1]: https://social.apreslanu.it/@stefw/109286638182665737
+
+:::{.column-screen}
+:::{layout-ncol=2}
+
+![](graphics/twitter-gdf-count.png)
+
+![](graphics/twitter-gdf-retweets.png)
+
+:::
+:::
+
+Comme on peut le voir, la fréquence de tweets et le nombre total de retweets ne suivent pas vraiment la même tendance.
+la distribution de retweets entre tweets positifs et négatifs n'est pas vraiment la même non plus.
+
+On peut voir que les tweets du personnage sont perçus négativement par le modéle et que cette négativité engendre plus de réactions depuis mi 2021.
+Ces réactions peuvent être positives comme négatives mais elles génèrent du bruit et amplifie ainsi la portée de son discours.
+
+## la tambouille
+
+Le détail des calculs peut être utile pour voir comment réduire les irrégularités cycliques en aggrégeant les tweets à la semaine et en opérant une moyenne glissante.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+```
+
+```{python}
+#| output: false
+
+sentiments = (
+    pd
+    .read_csv('https://raw.githubusercontent.com/stefw/gdf/main/gdefournasxlm-robertaok_withnature.csv')
+    .set_index('id')
+)
+
+sentiments
+```
+
+```{python}
+colors = {
+    'Negative': '#FF4136',
+    'Neutral': '#DDDDDD',
+    'Positive': '#7FDBFF'
+}
+```
+
+```{python}
+#| output: false
+
+sentiments_evolution = (
+    sentiments
+    .assign(
+        local_time = lambda df: pd.to_datetime(df.local_time),
+        date = lambda df: pd.to_datetime(df.local_time).dt.to_period('W')
+    )
+    .reset_index()
+    .groupby(['date', 'sentiment'])
+    .agg({
+        'id': 'count',
+        'retweet_count': ['sum', 'mean'],
+        'like_count': ['sum', 'mean']
+    })
+    .reset_index()
+    .pivot_table(
+        index='date',
+        columns='sentiment',
+        fill_value=0
+    )
+)
+
+sentiments_evolution
+```
+
+### graphique d'évolution des tweets
+
+```{python}
+#| layout-ncol: 1
+
+(
+    sentiments_evolution
+    [('id', 'count')]
+    .rolling(50)
+    .mean()
+    .plot
+    .area(
+        figsize=(15,10),
+        color=colors,
+        title='évolution du nombre de tweets par semaine'
+    )
+)
+
+plt.savefig('graphics/twitter-gdf-count.png')
+```
+
+### graphique d'évolution des retweets
+
+```{python}
+#| layout-ncol: 1
+
+(
+    sentiments_evolution
+    [('retweet_count', 'sum')]
+    .rolling(50)
+    .mean()
+    .plot
+    .area(
+        figsize=(15,10),
+        color=colors,
+        title='évolution du nombre de retweets par semaine'
+    )
+)
+
+plt.savefig('graphics/twitter-gdf-retweets.png')
+```
+
+### tableau de synthèse
+
+```{python}
+#| column: page
+sentiments_yearly = (
+    sentiments
+    .assign(
+        local_time = lambda df: pd.to_datetime(df.local_time),
+        date = lambda df: pd.to_datetime(df.local_time).dt.to_period('Y')
+    )
+    .reset_index()
+    .groupby(['date', 'sentiment'])
+    .agg({
+        'like_count': ['mean', 'sum'],
+        'retweet_count': ['mean', 'sum'] 
+    })
+    .reset_index()
+    .pivot_table(
+        index='date',
+        columns='sentiment'
+    )
+)
+
+sentiments_yearly
+```
+
