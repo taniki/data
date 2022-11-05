@@ -1,7 +1,7 @@
 {
-  "hash": "243a924a6fb24fcd00dd850419b2ff14",
+  "hash": "4adbb22348bd1b7ae7cd3b5ed7433318",
   "result": {
-    "markdown": "---\nauthor: tam kien duong\n---\n\n# Aides à la presse\n\n- [fiche sur data.gouv.fr][1]\n- [fiche sur le portail open data du ministère de la culture][2]\n\n[1]: https://www.data.gouv.fr/fr/datasets/aides-a-la-presse-1/\n[2]: https://data.culture.gouv.fr/explore/?disjunctive.theme=&disjunctive.keyword=&sort=modified&q=aide\n\n",
+    "markdown": "---\nauthor: tam kien duong\ndescription: Le ministère de la culture fournit l'ensemble sommes versées sous forme d'aide aux différents médias et groupes de presse.\n---\n\n# Aides à la presse\n\nLes aides à la presse sont des données économiques mis à la disposition par le ministère de la culture et de la communication.\nCes données sont importantes pour comprendre l'indépendance de la presse ainsi que l'économie des médias.\nLe rapport de force avec les GAFAM et leur emprise sur le champ de l'information est à mettre en parallèle avec ce que raconte ces données.\n\n\n- [fiche sur data.gouv.fr][1]\n- [fiches sur le portail open data du ministère de la culture][2]\n- [Médias français : qui possède quoi ?][3]\n\n[1]: https://www.data.gouv.fr/fr/datasets/aides-a-la-presse-1/\n[2]: https://data.culture.gouv.fr/explore/?disjunctive.theme=&disjunctive.keyword=&sort=modified&q=aide\n[3]: https://github.com/mdiplo/Medias_francais\n\n",
     "supporting": [
       "aides-presse_files"
     ],

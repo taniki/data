@@ -1,0 +1,31 @@
+---
+author: tam kien duong
+description: Le ministère de la culture fournit l'ensemble sommes versées sous forme d'aide aux différents médias et groupes de presse.
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.14.1
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
+# Aides à la presse
+
+Les aides à la presse sont des données économiques mis à la disposition par le ministère de la culture et de la communication.
+Ces données sont importantes pour comprendre l'indépendance de la presse ainsi que l'économie des médias.
+Le rapport de force avec les GAFAM et leur emprise sur le champ de l'information est à mettre en parallèle avec ce que raconte ces données.
+
+
+- [fiche sur data.gouv.fr][1]
+- [fiches sur le portail open data du ministère de la culture][2]
+- [Médias français : qui possède quoi ?][3]
+
+[1]: https://www.data.gouv.fr/fr/datasets/aides-a-la-presse-1/
+[2]: https://data.culture.gouv.fr/explore/?disjunctive.theme=&disjunctive.keyword=&sort=modified&q=aide
+[3]: https://github.com/mdiplo/Medias_francais
+
