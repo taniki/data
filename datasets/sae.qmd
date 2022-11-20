@@ -1,0 +1,31 @@
+---
+author: tam kien duong
+description: 'Les données sur les établissements de santé : des effectifs en passant par le matériel et les services.'
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.14.1
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
+# SAE
+
+Les données SAE pour "Statistique annuelle des établissements de santé" est la compilation d'un questionnaire annuel dont les répondants sont les établissements de santé.
+
+Les données sont très riches.
+L'archive comporte également un historique allant de 2000 à 2021.
+L'archive est par contre structurée par des stasticiens pour des statisticiens.
+Les données sont au format CSV et SAS.
+Un fichier excel permet de s'y retrouver dans les noms de colonnes et un pdf permet de comprendre quels sont les fichiers importants.
+
+Les principales clés de jointure sont les identifiants d'établissement et d'entité juridique de la base [FINESS](finess.qmd).
+
+
+- [fiche open data soft](https://drees2-sgsocialgouv.opendatasoft.com/explore/dataset/708_bases-statistiques-sae/information/?sort=-annee)
+

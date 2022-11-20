@@ -1,0 +1,11 @@
+{
+  "hash": "ac97c998d1baaed7bb8397fac1ea0b42",
+  "result": {
+    "markdown": "---\nauthor: tam kien duong\ndescription: 'Les données sur les établissements de santé : des effectifs en passant par le matériel et les services.'\n---\n\n# SAE\n\nLes données SAE pour \"Statistique annuelle des établissements de santé\" est la compilation d'un questionnaire annuel dont les répondants sont les établissements de santé.\n\nLes données sont très riches.\nL'archive comporte également un historique allant de 2000 à 2021.\nL'archive est par contre structurée par des stasticiens pour des statisticiens.\nLes données sont au format CSV et SAS.\nUn fichier excel permet de s'y retrouver dans les noms de colonnes et un pdf permet de comprendre quels sont les fichiers importants.\n\nLes principales clés de jointure sont les identifiants d'établissement et d'entité juridique de la base [FINESS](finess.qmd).\n\n\n- [fiche open data soft](https://drees2-sgsocialgouv.opendatasoft.com/explore/dataset/708_bases-statistiques-sae/information/?sort=-annee)\n\n",
+    "supporting": [
+      "sae_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
