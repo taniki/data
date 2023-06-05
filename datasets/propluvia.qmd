@@ -14,3 +14,7 @@ En août 2022, une nouvelle version de leur site permettant un export automatis�
 - [github de backup des données](https://github.com/taniki/propluvia)
 - [thread sur le forum *team open data*](https://teamopendata.org/t/propluvia/3853/1)
 - [thread sur le forum de l'association *ouvre boîte*](https://forum.ouvre-boite.org/t/donnees-propluvia-arretes-de-secheresse/442)
+
+Depuis l'été 2023, les données sont disponibles directement en csv mais seulement pour l'année en cours.
+
+- [fiche sur data.gouv.fr](https://www.data.gouv.fr/fr/datasets/donnee-secheresse-propluvia/)
