@@ -1,0 +1,24 @@
+---
+author: tam kien duong
+---
+
+# Assemblée Nationale
+
+L'Assemblée Nationale met à disposition des données sur l'activité des députés.
+Ces données sont pratiques à bien des égards pour la société civile et le data journalism.
+
+Le format est du json qui est en fait du xml mais cela reste praticable.
+
+Au menu, entre autres :
+
+- scrutins
+- amendements
+- débats
+- réunions
+
+## ressources
+
+- [data.assemblee-nationale.fr](http://data.assemblee-nationale.fr/)
+- [nosdeputes.fr](https://www.nosdeputes.fr/)
+- [datan](https://datan.fr)
+
