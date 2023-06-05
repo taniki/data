@@ -20,7 +20,7 @@ jupyter:
 
 # Twitter : bruit ou information ?
 
-{{< include ../../_includes/draft.qmd >}}
+{{< include /_includes/draft.qmd >}}
 
 ```{python}
 import pandas as pd
@@ -135,5 +135,5 @@ show_timeline(['brutofficiel'])
 show_timeline(['Loopsidernews'])
 ```
 
-{{< include ../../_includes/checkmeout.qmd >}}
+{{< include /_includes/checkmeout.qmd >}}
 

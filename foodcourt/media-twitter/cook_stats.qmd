@@ -18,7 +18,7 @@ jupyter:
     name: python3
 ---
 
-{{< include ../../_includes/draft.qmd >}}
+{{< include /_includes/draft.qmd >}}
 
 ```{python}
 import pandas as pd
@@ -115,4 +115,4 @@ plt.savefig('graphics/tweets_day.png')
 plt.show()
 ```
 
-{{< include ../../_includes/checkmeout.qmd >}}
+{{< include /_includes/checkmeout.qmd >}}
