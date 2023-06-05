@@ -2,6 +2,8 @@ project:
   type: website
   render:
     - "*.qmd"
+  preview:
+    port: 4000
 
 website:
   title: "la cuisine à données"
