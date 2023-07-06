@@ -1,0 +1,249 @@
+---
+jupyter:
+  jupytext:
+    formats: 'ipynb,qmd'
+    text_representation:
+      extension: .qmd
+      format_name: quarto
+      format_version: '1.0'
+      jupytext_version: 1.14.4
+  kernelspec:
+    display_name: Python 3 (ipykernel)
+    language: python
+    name: python3
+---
+
+# visualiser la divergence entre l'ipc et la consommation en biens
+
+![](./graphics/divergence_ipc_consobiens.png)
+
+## les données
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+```
+
+### la consommation des ménages en biens
+
+```{python}
+biens = (
+    pd
+    .read_excel(
+        'https://www.insee.fr/fr/statistiques/fichier/7614669/111_IR_Biens.xlsx',
+        sheet_name = "Niveaux - Levels",
+        skiprows = 10,
+        usecols = "A,C:D",
+        names = ['date', 'alimentaire', 'alimentaire hors tabac']
+    )
+    .set_index('date')
+)
+
+(
+    biens
+    .plot
+    .line()
+);
+```
+
+### l'indice des prix à la consommation
+
+> Définition : l’indice des prix à la consommation harmonisé (IPCH) est utilisé pour les comparaisons entre membres de l’Union européenne. Il est calculé pour tous les ménages, en France. La principale différence entre l’IPCH et l’IPC porte sur les dépenses de santé : l’IPCH suit des prix nets des remboursements de la sécurité sociale tandis que l’IPC suit des prix bruts.
+>
+> https://www.insee.fr/fr/statistiques/7233968#tableau-ipc-flash-g1-fr
+
+```{python}
+# HICP - Reference year 2015=100 - All households - France - COICOP
+# classification: 01 - Food and non-alcoholic beverages Identifier 001762445
+
+ipc = (
+    pd.
+    read_excel(
+        'data/serie_001762445_05072023.xlsx',
+        skiprows = 3,
+        names = ['date', 'ipc']
+    )
+    .assign(date = lambda df: pd.to_datetime(df.date))
+    .set_index('date')
+    .sort_index()
+)
+
+(
+    ipc
+    .plot
+    .line()
+);
+```
+
+## les deux courbes affichées sans aucun pré-réglage
+
+```{python}
+fig, ax = plt.subplots(figsize=(12,8))
+
+(
+    biens
+    .plot
+    .line(
+        ax= ax,
+        y = 'alimentaire hors tabac'
+    )
+)
+
+(
+    ipc
+    .plot
+    .line(
+        ax = ax,
+        secondary_y = True,
+    )
+)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+## consommation en biens indexée sur 2015
+
+```{python}
+biens_2015 = (
+    biens
+    .div(
+        biens
+        .loc['2015']
+        .mean()
+    )
+    .mul(100)
+)
+```
+
+```{python}
+fig, ax = plt.subplots(figsize=(12,8))
+
+(
+    biens_2015
+    .plot
+    .line(
+        ax= ax,
+        y = 'alimentaire hors tabac'
+    )
+)
+
+(
+    ipc
+    .plot
+    .line(ax = ax)
+)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+### une abscisse qui commence à 0
+
+
+```{python}
+fig, ax = plt.subplots(figsize=(12,8))
+
+(
+    biens_2015
+    .plot
+    .line(
+        ax= ax,
+        y = 'alimentaire hors tabac'
+    )
+)
+
+(
+    ipc
+    .plot
+    .line(ax = ax)
+)
+
+ax.set_ylim([0, ipc.ipc.max() * 1.1 ])
+
+plt.tight_layout()
+
+plt.show()
+```
+
+### avec un peu de travail cosmétique
+
+```{python}
+fig, ax = plt.subplots(figsize=(12,8))
+
+(
+    biens_2015
+    .loc['1996':]
+    .plot
+    .line(
+        ax= ax,
+        y = 'alimentaire hors tabac',
+        color = '#555'
+    )
+)
+
+ax.annotate(
+    text = 'consommation des ménages en biens\nalimentation\nannée de référence 2015',
+    xy = (biens_2015.index[-1], biens_2015['alimentaire'].iloc[-1]),
+    xytext = (3, 6),
+    textcoords = 'offset points',
+    color = '#555'
+)
+
+(
+    ipc
+    .plot
+    .line(
+        ax = ax,
+        color= '#800020'
+    )
+)
+
+ax.annotate(
+    text = 'indice des prix à la consommation (ipc)\nalimentation hors alcool\nannée de référence 2015',
+    xy = (ipc.index[-1], ipc.ipc.iloc[-1]),
+    xytext = (3, -10),
+    textcoords = 'offset points',
+    color= '#800020'
+)
+
+ax.get_legend().remove()
+
+ax.spines['top'].set_visible(False)
+ax.spines['bottom'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['left'].set_visible(False)
+
+ax.set_xlabel(None)
+
+ax.grid(axis='y')
+
+ax.set_title("""
+L'indice des prix à la consommation
+et la consommation des ménages en biens
+divergent de façon spectaculaire à partir de 2022.
+Source : INSEE.
+""",
+    loc = 'left'
+)
+
+plt.tight_layout()
+
+plt.savefig('graphics/divergence_ipc_consobiens.png')
+
+plt.show()
+```
+
+## compilation des données
+
+```{python}
+(
+    biens_2015
+    .loc['1996':]
+    .join(ipc)
+    .to_csv('datasets/divergence_ipc_consobiens.csv')
+)
+```
+
