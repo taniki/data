@@ -15,9 +15,14 @@ jupyter:
 
 # visualiser la divergence entre l'ipc et la consommation en biens
 
+Dans ce court article, nous allons regarder comment produire un graphique permettant de comparer l'évolution des prix de la consommation alimentaire et l'évolution des quantités de biens consommés.
+Pour cela, nous allons utilisé les données de l'INSEE ainsi que `pandas` et `matplotlib`.
+
 ![](./graphics/divergence_ipc_consobiens.png)
 
 ## les données
+
+{{< include /_includes/draft.qmd >}}
 
 ```{python}
 import pandas as pd
@@ -26,7 +31,14 @@ import matplotlib.pyplot as plt
 
 ### la consommation des ménages en biens
 
+Les données proviennent de l'INSEE.
+Le fichier mis à disposition est un fichier Excel assez sale mais facile à remettre en forme en quelques lignes de pandas.
+La principale fonction est `pd.read_excel()` avec quelques paramètres pour notamment sauter des lignes de présentation ainsi que sélectionner directement quelques colonnes.
+
+Le fichier est disponible tel quel en ligne et il suffit donc de fournir l'URL.
+
 ```{python}
+#| code-fold: false
 biens = (
     pd
     .read_excel(
@@ -48,11 +60,19 @@ biens = (
 
 ### l'indice des prix à la consommation
 
+Pour l'indice des prix à la consommation c'est la même manipulation mais cette fois-ci, il faut dézipper le fichier et sélectionner le fichier `excel`.
+C'est très certainement automatisable mais pour cet exemple, j'ai fait cela à la main.
+
+À noter aussi l'usage de `pd.to_datetime()` pour convertir la colonne `date` en objet `datetime` de pandas.
+
+```{python}
+
 > Définition : l’indice des prix à la consommation harmonisé (IPCH) est utilisé pour les comparaisons entre membres de l’Union européenne. Il est calculé pour tous les ménages, en France. La principale différence entre l’IPCH et l’IPC porte sur les dépenses de santé : l’IPCH suit des prix nets des remboursements de la sécurité sociale tandis que l’IPC suit des prix bruts.
 >
 > https://www.insee.fr/fr/statistiques/7233968#tableau-ipc-flash-g1-fr
 
 ```{python}
+#| code-fold: false
 # HICP - Reference year 2015=100 - All households - France - COICOP
 # classification: 01 - Food and non-alcoholic beverages Identifier 001762445
 
@@ -78,6 +98,7 @@ ipc = (
 ## les deux courbes affichées sans aucun pré-réglage
 
 ```{python}
+#| layout-ncol: 1
 fig, ax = plt.subplots(figsize=(12,8))
 
 (
@@ -106,6 +127,7 @@ plt.show()
 ## consommation en biens indexée sur 2015
 
 ```{python}
+#| code-fold: false
 biens_2015 = (
     biens
     .div(
@@ -118,6 +140,7 @@ biens_2015 = (
 ```
 
 ```{python}
+#| layout-ncol: 1
 fig, ax = plt.subplots(figsize=(12,8))
 
 (
@@ -144,6 +167,7 @@ plt.show()
 
 
 ```{python}
+#| layout-ncol: 1
 fig, ax = plt.subplots(figsize=(12,8))
 
 (
@@ -170,7 +194,13 @@ plt.show()
 
 ### avec un peu de travail cosmétique
 
+- enlever le cadre du graphique ;
+- utiliser une grille verticale ;
+- remplacer la légende par une annotation de chacun des séries.
+
 ```{python}
+#| layout-ncol: 1
+#| code-fold: false
 fig, ax = plt.subplots(figsize=(12,8))
 
 (
@@ -216,17 +246,20 @@ ax.spines['bottom'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.spines['left'].set_visible(False)
 
+
 ax.set_xlabel(None)
 
 ax.grid(axis='y')
 
 ax.set_title("""
-L'indice des prix à la consommation
-et la consommation des ménages en biens
-divergent de façon spectaculaire à partir de 2022.
-Source : INSEE.
+L'indice des prix à la consommation et la consommation des ménages en biens divergent de façon spectaculaire à partir de 2022 et un dérèglement systémique en 2020 suite au covid.
 """,
-    loc = 'left'
+    loc = 'left',
+    fontdict = {
+        'fontsize': 14,
+        'fontweight': 'bold'
+    },
+    wrap = True
 )
 
 plt.tight_layout()
@@ -238,7 +271,10 @@ plt.show()
 
 ## compilation des données
 
+Exporter les données pour les utiliser dans un autre logiciel de visualisation.
+
 ```{python}
+#| code-fold: false
 (
     biens_2015
     .loc['1996':]
