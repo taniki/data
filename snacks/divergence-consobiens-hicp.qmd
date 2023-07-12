@@ -30,8 +30,6 @@ Un peu d'autodéfense statistique ne fait jamais de mal.
 
 ## les données
 
-{{< include /_includes/draft.qmd >}}
-
 ```{python}
 import pandas as pd
 import matplotlib.pyplot as plt
