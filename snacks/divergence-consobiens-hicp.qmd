@@ -20,6 +20,9 @@ Pour cela, nous allons utilisé les données de l'INSEE ainsi que `pandas` et `m
 
 ![](./graphics/divergence_ipc_consobiens.png)
 
+Un graphique similaire a tourné sur Twitter avant d'atterir sur Mastodon.
+Intrigué par son petit côté spectaculaire, il semble important de pouvoir le déconstruire et le reconstruire au moins pour canaliser un biais de confirmation.
+
 ## les données
 
 {{< include /_includes/draft.qmd >}}
@@ -31,11 +34,12 @@ import matplotlib.pyplot as plt
 
 ### la consommation des ménages en biens
 
-Les données proviennent de l'INSEE.
-Le fichier mis à disposition est un fichier Excel assez sale mais facile à remettre en forme en quelques lignes de pandas.
-La principale fonction est `pd.read_excel()` avec quelques paramètres pour notamment sauter des lignes de présentation ainsi que sélectionner directement quelques colonnes.
+Les données proviennent de l'INSEE dans le cadre d'un [suivi régulier des dépenses de consommation][1].
+Le [fichier mis à disposition est un fichier Excel][2] assez sale mais facile à remettre en forme en quelques lignes de pandas.
+La principale fonction est `pd.read_excel()` qui aller chercher tout seul un fichier derrière une URL. Avec quelques paramètres pour notamment sauter des lignes de présentation ainsi que sélectionner directement quelques colonnes, on a assez rapidement un beau `pd.DataFrame`.
 
-Le fichier est disponible tel quel en ligne et il suffit donc de fournir l'URL.
+[1]: https://www.insee.fr/fr/statistiques/7614669
+[2]: https://www.insee.fr/fr/statistiques/fichier/7614669/111_IR_Biens.xlsx
 
 ```{python}
 #| code-fold: false
@@ -60,8 +64,16 @@ biens = (
 
 ### l'indice des prix à la consommation
 
-Pour l'indice des prix à la consommation c'est la même manipulation mais cette fois-ci, il faut dézipper le fichier et sélectionner le fichier `excel`.
+Pour l'indice des prix à la consommation c'est la même manipulation mais cette fois-ci, [les données][3] sont fournis dans un `zip`.
+Il faut donc aller le dézipper au préalable ; ce que ne sait pas faire `pandas`.
 C'est très certainement automatisable mais pour cet exemple, j'ai fait cela à la main.
+
+[3]: https://www.insee.fr/fr/statistiques/serie/001762445#Telechargement
+
+La série est en base 100 en indice 2015.
+Ce qui signifie que les valeurs sont à interpréter comme un taux de variation multiplié par 100.
+Ce ne sont pas donc pas des valeurs absolues comme des euros ou des tonnes.
+L'intention est de donner une lecture centrée sur l'évolution des ordres de grandeur.
 
 À noter aussi l'usage de `pd.to_datetime()` pour convertir la colonne `date` en objet `datetime` de pandas.
 
@@ -124,7 +136,12 @@ plt.tight_layout()
 plt.show()
 ```
 
+Ceci est l'affichage brut des deux séries chacune avec une échelle différente ainsi qu'une pronfondeur temporelle différente.
+
 ## consommation en biens indexée sur 2015
+
+Pour commencer à comparer les deux séries, on va les ramener à une base commune : la base 100 indexée sur 2015.
+Pour cela, rien de plus simple, on récupère la moyenne de l'ipc en 2015, on divise le reste de la série par cette valeur (`.div()`) et on multiplie par 100 (`.mul(100)`).
 
 ```{python}
 #| code-fold: false
@@ -163,7 +180,13 @@ plt.tight_layout()
 plt.show()
 ```
 
+Ce graphique commence à ressembler au graphique initial.
+Il est intentionnellement centré sur 2015 au niveau de l'abscisse ce qui évacue l'effet de hasard des superpositions de graphiques à double échelle.
+
+
 ### une abscisse qui commence à 0
+
+La divergence est assez prononcé mais par acquis de conscience, cela ne fait pas de mal de voir à quoi ressemble le graphique quand on force la présence d'une origine avec la méthode `.set_ylim()` de matplotlib.
 
 
 ```{python}
@@ -194,9 +217,12 @@ plt.show()
 
 ### avec un peu de travail cosmétique
 
-- enlever le cadre du graphique ;
-- utiliser une grille verticale ;
-- remplacer la légende par une annotation de chacun des séries.
+Maintenant pour rendre le graphique présentable, nous allons appliquer les principes suivants :
+
+- enlever le cadre du graphique pour réduire le bruit visuel ;
+- utiliser une grille horizontale pour faciliter la lecture des valeurs ;
+- remplacer la légende par une annotation de chacune des séries pour éviter la répétition de l'information ;
+- et enfin mettre un titre descriptif pour guider la lecture.
 
 ```{python}
 #| layout-ncol: 1
@@ -271,7 +297,7 @@ plt.show()
 
 ## compilation des données
 
-Exporter les données pour les utiliser dans un autre logiciel de visualisation.
+Pour finir, il faut exporter les données pour éventuellement les utiliser dans un autre logiciel de visualisation.
 
 ```{python}
 #| code-fold: false
