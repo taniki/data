@@ -94,7 +94,6 @@ pokemons_types
 )
 ```
 
-{{<  include /_includes/draft.qmd  >}}
 
 ## visualiser les ressemblances
 
