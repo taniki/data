@@ -3,7 +3,18 @@ title: spatialisation des députés avec une analyse en composantes principales
 author: duong tam kien
 ---
 
+Dans le cadre d'un [article] sur l'anniversaire de la 16ème législature et au détour d'analyses sur les votes et les interventions des députés, j'ai pu produire une modeste spatialisation des députés en fonction de leur vote.
+Cette article est une recette assez simple pour reproduire cette visualisation en expliquant les différentes étapes ainsi que les principes rationnels en arrière fond.
+Ce n'est pas vraiment de la cuisine de haute volée mais de la transparence sur les méthodes ne fait jamais de mal.
+
+[article]: https://www.mediapart.fr/journal/politique/220623/un-de-votes-attrape-tout-pour-le-rn
+
 ## la visualisation
+
+![](graphics/acteurs_pca_scrutins.png)
+
+C'est une visualisation surtout illustrative et exploratoire au contraire d'avoir une valeur explicative.
+Ainsi, le vide autour des députés RN ne permet pas inférer grand chose sur le cordon sanitaire mais par contre on peut se poser des questions sur l'absence d'une droite d'opposition.
 
 ## la recette
 
@@ -76,17 +87,45 @@ X = (
 X
 ```
 
+On se retrouve bien avec une matrice dont les dimensions correspondent au nombre de députés ayant votés en lignes et au nombre de scrutins en colonnes.  
+Une somme sur les lignes (`X.sum(axis=1)`) nous donne si un député est plutôt pour ou contre.
+Pas très utile en soit mais peut être intéressant car il suffit de sélectionne les scrutins en sélection les colonnes avec `X.[]`.  
+Une somme sur les colonnes (`X.sum()`) nous donne le résultat des scrutins.
+
 Il est certainement possible de faire la même chose avec scikit-learn mais pourquoi s'embêter quand cela fonctionne et que c'est relativement simple.
 
 
 ### réduire à deux dimensions avec une PCA
 
-```{python}
-pca = PCA(n_components=2)
-X_r = pca.fit_transform(X.values)
-```
+Une Analyse en Composantes Principales ([PCA]) est une méthode de réduction de dimension.
+L'idée est de trouver les plans qui expliquent le mieux la variance des données.
+Comme une sorte de régression linéaire mais avec beaucoup de variables en entrée et un peu moins en sortie.
+
+Avec la méthode [`PCA`][PCA-sklearn] de `scikit-learn`, c'est relativement simple.
+Il suffit d'entrainer le modèle sur les données $X$ et de l'appliquer à ces mêmes données $X_r = f(X)$ avec la méthode `fit_transform` qui fait ce qu'elle dit.
+
+[PCA]: https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales
+[PCA-sklearn]: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
 
 ```{python}
+#| code-fold: False
+pca = PCA(n_components=2)
+X_r = pca.fit_transform(X.values)
+
+X_r
+```
+
+On se retrouve avec une matrice de deux colonnes correspondant aux deux dimensions.
+C'est ce qu'on a demandé.
+
+Il faut maintenant recoller les morceaux avec un peu de pandas pour avoir un tableau avec les députés, leur position et leur groupe parlementaire.
+Pour cela rien de plus quotidien qu'un petit [`join`][pd-join] pour se détendre.
+
+[pd-join]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.join.html
+
+```{python}
+#| code-fold: False
+
 mapping = (
     pd
     .DataFrame(X_r, columns=["axe 1", "axe 2"])
@@ -103,7 +142,13 @@ mapping
 
 ### visualiser les députés
 
+Avant de passer à la visualisation, prenons un petit moment pour préparer de jolis tables qui pourront être utilisé par des publics moins avertis ou pour afficher des données contextuelles dans une visualisation interactive.
+
+Commencons par les députés :
+
 ```{python}
+#| code-fold: False
+
 acteurs_pca = (
     mapping
     [['axe 1','axe 2', 'organe']]
@@ -113,6 +158,15 @@ acteurs_pca = (
 
 acteurs_pca
 ```
+
+Puis les groupes parlementaires en calculant la position médiannne avec un [`groupby`][pd-groupby] et [`median`][pd-median].
+
+Au passage, on trie les groupes en fonction de l'axe 2 qui correspond à un axe gauche-droite.
+Cela permet d'afficher un tas de choses automatiquement sans avoir à classer manuellement les groupes.
+
+[pd-groupby]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.groupby.html
+[pd-median]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.median.html
+
 
 ```{python}
 axe = (
@@ -130,7 +184,18 @@ axe = (
 )
 ```
 
+Voilà tout est prêt pour la touche finale et laisser matplotlib faire sa magie.
+Rien de spécial au niveau de la visualisation, c'est la fonction [`df.plot.scatter`][df-plot-scatter] qui fait tout le travail.
+On cache les axes, par préférence personelle comme les valeurs n'ont pas une grande importance, et on ajoute une légende avec les groupes parlementaires.
+
+[df-plot-scatter]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.plot.scatter.html
+
 ```{python}
+
+```{python}
+#| code-fold: False
+#| layout-ncol: 1
+
 fig, ax = plt.subplots()
 
 (
@@ -177,3 +242,6 @@ plt.savefig('graphics/acteurs_pca_scrutins.png', bbox_inches='tight')
 
 plt.show()
 ```
+
+À partir de là, il suffit de sauvegarder les données ou de les injecter pour l'intégrer au système de visualisation souhaité.
+Pour l'article de Mediapart, c'est du datawrapper branché à un tableur en ligne.
