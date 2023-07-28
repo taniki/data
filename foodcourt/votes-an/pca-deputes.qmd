@@ -38,6 +38,11 @@ from sklearn.decomposition import PCA
 
 ### les ingrédients
 
+Les données dont on a besoin sont essentiellement les votes des députés.
+Elles proviennent du site [open data de l'Assemblée Nationale](https://data.assemblee-nationale.fr/).
+Initialement au format XML, et un export au format JSON assez dégueux, ici, nous utiliserons une version légèrement retraitée dont le processus est consultable [ici](https://github.com/taniki/assemblee-nationale/blob/main/an-l16/1_prep_scrutins_votes.ipynb).
+
+
 ```{python}
 base = "https://raw.githubusercontent.com/taniki/assemblee-nationale/main/an-l16/"
 
