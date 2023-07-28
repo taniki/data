@@ -1,0 +1,179 @@
+---
+title: spatialisation des députés avec une analyse en composantes principales
+author: duong tam kien
+---
+
+## la visualisation
+
+## la recette
+
+https://github.com/taniki/assemblee-nationale
+
+### les ustensiles
+
+Pour cette petite recette, nous aurons besoin de trois ustensiles de cuisine assez classiques :
+
+- [pandas] pour la manipulation des données
+- [matplotlib] pour la visualisation
+- et enfin [scikit-learn] pour l'analyse en composantes principales
+
+[pandas]: https://pandas.pydata.org/
+[matplotlib]: https://matplotlib.org/
+[scikit-learn]: https://scikit-learn.org/
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+```
+
+### les ingrédients
+
+```{python}
+base = "https://raw.githubusercontent.com/taniki/assemblee-nationale/main/an-l16/"
+
+organes = pd.read_csv(f'{base}out/organes.csv')
+acteurs = pd.read_csv(f'{base}out/acteurs.csv')
+votes = pd.read_csv(f'{base}out/votes.csv')
+```
+
+### vectoriser les députés
+
+Chaque député vote "pour", "contre" ou "s'abstient", c'est sa position, a un nombre fini de scrutins.
+Nous allons nous servir de cette information pour construire un vecteur pour chaque député.
+Chaque colonne correpond donc à un scrutin dont la valeur est encodé numériquement de la façon suivante :
+
+- `1` pour un vote "pour"
+- `-1` pour un vote "contre"
+- `0` pour un vote "abstention"
+
+À noter que cela pourrait être n'importe quel autre séquence de chiffre mais ainsi on peut faire quelques calculs.
+
+Par soucis de cohérence, nous allons stocker ces vecteurs dans une variable $X$ comme l'idée est d'avoir une fonction de la forme $y = f(X)$ permettant de situer les députées en fonction de leur vote.
+Le machine learning permet de trouver les paramètre de cette fonction $f$.
+
+Pour passer d'un dataframe au format `long` à une matrice, nous allons utlisé la bonne vieille fonction [`pivot_table`] de pandas.
+
+[`pivot_table`]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.pivot_table.html
+
+```{python}
+
+```{python}
+#| code-fold: False
+X = (
+    votes
+    .assign(
+        position = lambda df: df.position.replace({'contre': -1, 'pour': 1, 'abstention': 0 })
+    )
+    .pivot_table(
+        index='acteurRef',
+        columns='scrutin',
+        values='position'
+    )
+    .fillna(0)
+)
+
+X
+```
+
+Il est certainement possible de faire la même chose avec scikit-learn mais pourquoi s'embêter quand cela fonctionne et que c'est relativement simple.
+
+
+### réduire à deux dimensions avec une PCA
+
+```{python}
+pca = PCA(n_components=2)
+X_r = pca.fit_transform(X.values)
+```
+
+```{python}
+mapping = (
+    pd
+    .DataFrame(X_r, columns=["axe 1", "axe 2"])
+    .join(
+        X.reset_index()
+        .join(votes.drop_duplicates(subset='acteurRef').set_index('acteurRef'), on='acteurRef')
+        .join(organes.set_index('uid'), on='organe')
+    )
+    .set_index('acteurRef')
+)
+
+mapping
+```
+
+### visualiser les députés
+
+```{python}
+acteurs_pca = (
+    mapping
+    [['axe 1','axe 2', 'organe']]
+    .join(acteurs.set_index('uid'))
+    .join(organes.set_index('uid')[['libelleAbrev', 'couleurAssociee']], on='organe')
+)
+
+acteurs_pca
+```
+
+```{python}
+axe = (
+    mapping
+    [['axe 1','axe 2', 'organe']]
+    .groupby('organe')
+    .median()
+    .sort_values('axe 2')
+)
+
+(
+    axe
+    .join(organes.set_index('uid'))
+    .set_index('libelle')
+)
+```
+
+```{python}
+fig, ax = plt.subplots()
+
+(
+    axe
+    .join(organes.set_index('uid'))
+    .plot
+    .scatter(
+        x="axe 2",
+        y="axe 1",
+        c="couleurAssociee",
+        alpha=0.3,
+        s=5000,
+        ax=ax,
+    )
+)
+
+(
+    mapping
+    .plot
+    .scatter(
+        x="axe 2",
+        y="axe 1",
+        s=12,
+        alpha= 0.7,
+        c="couleurAssociee",
+        figsize=(15,10),
+        ax=ax
+    )
+)
+
+plt.legend(
+    handles=[
+        plt.Line2D([0], [0], marker='o', color='w', label=org['libelle'], markerfacecolor=org['couleurAssociee'], markersize=15)
+        for org in axe.join(organes.set_index('uid')).to_records()
+    ],
+    loc='upper center',
+    bbox_to_anchor=(0.5, -0.1),
+    ncol=3
+)
+
+ax.axis('off')
+
+plt.savefig('graphics/acteurs_pca_scrutins.png', bbox_inches='tight')
+
+plt.show()
+```
