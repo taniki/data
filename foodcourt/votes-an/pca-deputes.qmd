@@ -3,9 +3,9 @@ title: spatialisation des députés avec une analyse en composantes principales
 author: duong tam kien
 ---
 
-Dans le cadre d'un [article] sur l'anniversaire de la 16ème législature et au détour d'analyses sur les votes et les interventions des députés, j'ai pu produire une modeste spatialisation des députés en fonction de leur vote.
-Cette article est une recette assez simple pour reproduire cette visualisation en expliquant les différentes étapes ainsi que les principes rationnels en arrière fond.
-Ce n'est pas vraiment de la cuisine de haute volée mais de la transparence sur les méthodes ne fait jamais de mal.
+Dans le cadre d'un [article] sur l'anniversaire de la 16e législature et au détour d'analyses sur les votes et les interventions des députés, j'ai pu produire une modeste spatialisation des députés en fonction de leur vote.
+Cet article est une recette assez simple pour reproduire cette visualisation en expliquant les différentes étapes ainsi que les principes rationnels en arrière-fond.
+Ce n'est pas vraiment de la cuisine de haute volée, mais de la transparence sur les méthodes ne fait jamais de mal.
 
 [article]: https://www.mediapart.fr/journal/politique/220623/un-de-votes-attrape-tout-pour-le-rn
 
@@ -14,7 +14,7 @@ Ce n'est pas vraiment de la cuisine de haute volée mais de la transparence sur 
 ![](graphics/acteurs_pca_scrutins.png)
 
 C'est une visualisation surtout illustrative et exploratoire au contraire d'avoir une valeur explicative.
-Ainsi, le vide autour des députés RN ne permet pas inférer grand chose sur le cordon sanitaire mais par contre on peut se poser des questions sur l'absence d'une droite d'opposition.
+Ainsi, le vide autour des députés RN ne permet pas d’inférer grand-chose sur le cordon sanitaire, mais par contre on peut se poser des questions sur l'absence d'une droite d'opposition.
 
 ## la recette
 
@@ -52,18 +52,18 @@ votes = pd.read_csv(f'{base}out/votes.csv')
 
 Chaque député vote "pour", "contre" ou "s'abstient", c'est sa position, a un nombre fini de scrutins.
 Nous allons nous servir de cette information pour construire un vecteur pour chaque député.
-Chaque colonne correpond donc à un scrutin dont la valeur est encodé numériquement de la façon suivante :
+Chaque colonne correspond donc à un scrutin dont la valeur est encodée numériquement de la façon suivante :
 
 - `1` pour un vote "pour"
 - `-1` pour un vote "contre"
 - `0` pour un vote "abstention"
 
-À noter que cela pourrait être n'importe quel autre séquence de chiffre mais ainsi on peut faire quelques calculs.
+À noter que cela pourrait être n'importe quelle autre séquence de chiffre, mais ainsi on peut faire quelques calculs.
 
-Par soucis de cohérence, nous allons stocker ces vecteurs dans une variable $X$ comme l'idée est d'avoir une fonction de la forme $y = f(X)$ permettant de situer les députées en fonction de leur vote.
-Le machine learning permet de trouver les paramètre de cette fonction $f$.
+Par souci de cohérence, nous allons stocker ces vecteurs dans une variable $X$ comme l'idée est d'avoir une fonction de la forme $y = f(X)$ permettant de situer les députées en fonction de leur vote.
+Le machine learning permet de trouver les paramètres de cette fonction $f$.
 
-Pour passer d'un dataframe au format `long` à une matrice, nous allons utlisé la bonne vieille fonction [`pivot_table`] de pandas.
+Pour passer d'un *dataframe* au format `long` à une matrice, nous allons utiliser la bonne vieille fonction [`pivot_table`] de pandas.
 
 [`pivot_table`]: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.pivot_table.html
 
