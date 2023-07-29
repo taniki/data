@@ -9,19 +9,23 @@ website:
   title: "la cuisine à données"
   navbar:
     background: primary
+    right:
+      - icon: github
+        href: https://github.com/taniki
+        aria-label: GitHub
+      - icon: mastodon
+        href: https://social.apreslanu.it/@tk
+        aria-label: Mastodon
+        rel: me
   page-footer:
     left: "dernière modification : {{< meta date >}}"
     right:
       - icon: bar-chart-fill
         href: https://plausible.io/data.11d.im/
+        aria-label: statistiques d'audience
       - icon: heart-fill
         href: https://quarto.org
-      - icon: github
-        href: https://github.com/taniki
-      - icon: mastodon
-        href: https://social.apreslanu.it/@tk
-      - icon: twitter
-        href: https://twitter.com/taniki
+        aria-label: merci à quarto
   repo-url: https://github.com/taniki/data
   repo-actions: [issue]
 
